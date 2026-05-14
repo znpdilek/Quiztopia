@@ -1,0 +1,25 @@
+# Çevresel Değişkenler ve Şifreler (EN ÖNEMLİSİ!)
+.env
+.env.*
+*.env
+
+# Python Sanal Ortamları (Çok yer kaplar, GitHub'a yüklenmez)
+venv/
+env/
+.venv/
+Scripts/
+
+# Derlenmiş Python Dosyaları (Gereksiz kalabalık)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE ve İşletim Sistemi Kalıntıları
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Frontend
+node_modules/
+dist/
