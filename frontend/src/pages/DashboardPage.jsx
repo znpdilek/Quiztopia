@@ -120,12 +120,13 @@ export default function DashboardPage() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Sadece useEffect satırını değiştir:
   useEffect(() => {
     api.getUserStats(user.id).then(s => {
       setStats(s);
       setLoading(false);
     });
-  }, [user.id]);
+  }, [user.id, user.total_xp]); // ← user.total_xp eklendi
 
   if (loading) return (
     <div className="flex items-center justify-center h-64 text-neon-cyan font-mono animate-pulse">

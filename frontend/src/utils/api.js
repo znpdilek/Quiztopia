@@ -1,5 +1,6 @@
 import quizData    from "../data/quiz_data.json";
 import dersNotlari from "../data/ders_notlari.json";
+import { supabase } from "../lib/supabase.js";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
 
@@ -164,16 +165,23 @@ export const api = {
   },
 
   // ── Leaderboard ──
-  async getLeaderboard(period = "weekly") {
-    const remote = await request(`/gamification/leaderboard?period=${period}`);
-    if (remote) return remote.leaderboard;
-    return [
-      { rank: 1, username: "Çaylak42", xp: 4200, level: "Efsane",     badges: ["👑", "🔥"] },
-      { rank: 2, username: "DevHunter", xp: 3100, level: "Usta",       badges: ["🧠", "💯"] },
-      { rank: 3, username: "SQLKing",   xp: 2800, level: "Usta",       badges: ["🗄️", "⚡"] },
-      { rank: 4, username: "CyberGirl", xp: 1900, level: "Uzman",      badges: ["🛡️"] },
-      { rank: 5, username: "JavaBoss",  xp: 1400, level: "Uzman",      badges: ["☕", "🎯"] },
-    ];
+  // getLeaderboard fonksiyonunu bul ve tamamını bununla değiştir:
+  async getLeaderboard(_period = "weekly") {
+    const { data, error } = await supabase
+      .from("users")
+      .select("username, total_xp, level, badges")
+      .order("total_xp", { ascending: false })
+      .limit(20);
+
+    if (error || !data?.length) return [];
+
+    return data.map((row, i) => ({
+      rank:     i + 1,
+      username: row.username || "Anonim",
+      xp:       row.total_xp || 0,
+      level:    row.level    || getLevel(row.total_xp || 0),
+      badges:   row.badges   || [],
+    }));
   },
 
   // ── User Stats ──

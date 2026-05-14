@@ -2,7 +2,8 @@ import { Link, useLocation } from "react-router-dom";
 import { Brain, BarChart2, BookOpen, Trophy, Zap, LogOut } from "lucide-react";
 import { useUser } from "../context/UserContext.jsx";
 import { api } from "../utils/api.js";
-import quiztopiaLogo from "../assets/quiztopia-logo.png";
+import { Sparkles, CircleHelp } from "lucide-react";
+
 
 const NAV_LINKS = [
   { to: "/",            label: "Ana Sayfa",  icon: Zap },
@@ -32,8 +33,65 @@ export default function Navbar() {
     <nav className="sticky top-0 z-40 w-full backdrop-blur-xl bg-dark-900/80 border-b border-white/5">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-8">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5 flex-shrink-0">
-          <img src={quiztopiaLogo} alt="Quiztopia" className="h-10 w-auto" />
+       {/* Logo */}
+<Link to="/" className="flex items-center gap-3 flex-shrink-0">
+
+          <div className="relative flex items-center justify-center w-12 h-12">
+
+            {/* dış halka */}
+            <div className="
+      absolute w-12 h-12 rounded-full
+      border-2 border-neon-cyan
+      opacity-60
+    "></div>
+
+            {/* iç kutu */}
+            <div className="
+      w-9 h-9 rounded-xl
+      bg-gradient-to-br
+      from-neon-cyan
+      to-neon-pink
+      flex items-center justify-center
+      rotate-12
+    ">
+              <CircleHelp
+                size={18}
+                className="text-dark-900 -rotate-12"
+              />
+            </div>
+
+            {/* küçük yıldız */}
+            <Sparkles
+              size={12}
+              className="
+      absolute
+      -top-1
+      -right-1
+      text-neon-cyan
+      "
+            />
+          </div>
+
+          <div className="leading-none">
+            <div className="
+      font-display
+      font-extrabold
+      text-2xl
+      tracking-wider
+      neon-text
+    ">
+              QUIZITOPIA
+            </div>
+
+            <div className="
+      text-[8px]
+      opacity-70
+      tracking-[0.35em]
+    ">
+              PLAY • LEARN • LEVEL UP
+            </div>
+          </div>
+
         </Link>
 
         {/* Nav Links */}

@@ -49,6 +49,11 @@ export function useQuiz() {
     setLoading(true);
     const qs = await api.getQuestions(config);
     setQuestions(qs);
+    const cleaned = qs.map(q => ({
+      ...q,
+      soru: q.soru?.replace(/^\d+\s*[–-]\s*/, "") ?? q.soru,
+    }));
+    setQuestions(cleaned);
     setCurrentIdx(0);
     setScore(0);
     setSessionXP(0);

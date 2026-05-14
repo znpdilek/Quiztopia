@@ -2,37 +2,120 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { LogIn, Eye, EyeOff, AlertCircle } from "lucide-react";
 import { useUser } from "../context/UserContext.jsx";
-import quiztopiaLogo from "../assets/quiztopia-logo.png";
+import { CircleHelp, Sparkles } from "lucide-react";
 
 export default function LoginPage() {
   const { login } = useUser();
-  const [form, setForm]       = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ username: "", password: "" });
   const [showPw, setShowPw]   = useState(false);
   const [error, setError]     = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    if (!form.email || !form.password) {
-      setError("E-posta ve şifre alanları zorunludur.");
-      return;
-    }
-    setLoading(true);
-    const result = await login(form.email, form.password);
-    if (result?.error) {
-      setError(result.error);
-    }
+  
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
+  if (!form.username || !form.password) {
+    setError("Kullanıcı adı ve şifre zorunludur.");
+    return;
+  }
+  setLoading(true);
+
+  // username → email lookup (Supabase profiles tablosundan)
+  const { supabase } = await import("../lib/supabase.js");
+  const { data: profile, error: lookupError } = await supabase
+    .from("users")
+    .select("email")
+    .eq("username", form.username)
+    .single();
+
+  if (lookupError || !profile?.email) {
+    setError("Bu kullanıcı adına ait hesap bulunamadı.");
     setLoading(false);
-  };
+    return;
+  }
+
+  const result = await login(profile.email, form.password);
+  if (result?.error) setError(result.error);
+  setLoading(false);
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-md animate-slide-up">
-        {/* Logo */}
-        <div className="flex justify-center mb-8">
-          <img src={quiztopiaLogo} alt="Quiztopia" className="h-20 w-auto" />
-        </div>
+     
+     {/* Logo */}
+<div className="flex justify-center mb-8">
+
+  <div className="flex items-center gap-3">
+
+    <div className="relative flex items-center justify-center w-14 h-14">
+
+      {/* dış halka */}
+      <div
+        className="
+        absolute w-14 h-14 rounded-full
+        border-2 border-neon-cyan
+        opacity-60
+      "
+      />
+
+      {/* iç ikon alanı */}
+      <div
+        className="
+        w-10 h-10 rounded-xl
+        bg-gradient-to-br
+        from-neon-cyan
+        to-neon-pink
+        flex items-center justify-center
+        rotate-12
+      "
+      >
+        <CircleHelp
+          size={22}
+          className="text-dark-900 -rotate-12"
+        />
+      </div>
+
+      {/* küçük parıltı */}
+      <Sparkles
+        size={13}
+        className="
+        absolute
+        -top-1
+        -right-1
+        text-neon-cyan
+        "
+      />
+    </div>
+
+    <div className="leading-none">
+      <div
+        className="
+        font-display
+        font-extrabold
+        text-3xl
+        tracking-wider
+        neon-text
+      "
+      >
+        QUIZITOPIA
+      </div>
+
+      <div
+        className="
+        text-[9px]
+        opacity-70
+        tracking-[0.35em]
+      "
+      >
+        PLAY • LEARN • LEVEL UP
+      </div>
+    </div>
+
+  </div>
+
+</div>
 
         <div className="card p-8 border border-white/10 space-y-6">
           <div className="text-center">
@@ -50,18 +133,18 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-xs font-display font-semibold tracking-widest text-white/40 uppercase mb-2">
-                E-posta
+                Kullanıcı Adı
               </label>
               <input
-                type="email"
-                autoComplete="email"
-                value={form.email}
-                onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
-                placeholder="ornek@email.com"
+                type="text"
+                autoComplete="username"
+                value={form.username}
+                onChange={e => setForm(p => ({ ...p, username: e.target.value }))}
+                placeholder="QuizMaster42"
                 className="w-full px-4 py-3 rounded-xl bg-dark-700/80 border border-white/10
-                           text-white placeholder-white/20 text-sm font-body
-                           focus:outline-none focus:border-neon-cyan/50 focus:bg-dark-700
-                           transition-all duration-200"
+                          text-white placeholder-white/20 text-sm font-body
+                          focus:outline-none focus:border-neon-cyan/50 focus:bg-dark-700
+                          transition-all duration-200"
               />
             </div>
 

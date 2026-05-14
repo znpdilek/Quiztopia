@@ -46,11 +46,10 @@ export default function HomePage() {
           <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-pulse" />
           YENİ NESIL EĞİTİM PLATFORMU
         </div>
-
-        <h1 className="font-display font-black text-5xl md:text-7xl tracking-tight">
-          <span className="neon-text">BİLGİNİ</span>
+<h1 className="font-display font-black text-5xl md:text-7xl tracking-tight">
+          <span className="neon-text">Bilgini</span>
           <br />
-          <span className="text-white/90">TEST ET</span>
+          <span className="text-white/90">Test Et</span>
         </h1>
 
         <p className="text-white/50 font-body text-lg max-w-xl mx-auto leading-relaxed">
