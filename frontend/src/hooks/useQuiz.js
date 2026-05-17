@@ -51,7 +51,7 @@ export function useQuiz() {
     setQuestions(qs);
     const cleaned = qs.map(q => ({
       ...q,
-      soru: q.soru?.replace(/^\d+\s*[–-]\s*/, "") ?? q.soru,
+      soru: q.soru?.replace(/^\d+[\s]*[-–—.)\s]+\s*/, "") ?? q.soru,
     }));
     setQuestions(cleaned);
     setCurrentIdx(0);

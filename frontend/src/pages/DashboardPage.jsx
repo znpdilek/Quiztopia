@@ -122,6 +122,7 @@ export default function DashboardPage() {
 
   // Sadece useEffect satırını değiştir:
   useEffect(() => {
+    setLoading(true);
     api.getUserStats(user.id).then(s => {
       setStats(s);
       setLoading(false);
