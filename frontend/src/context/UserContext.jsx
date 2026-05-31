@@ -83,11 +83,13 @@ export function UserProvider({ children }) {
       async (event, session) => {
         if (event === "SIGNED_IN" && session) {
           // Her girişte DB'den gerçek profili çek
-          const profile = await syncUserProfile(session.user);
-          if (profile) {
-            setUser(profile);
-            setAuthToken(session.access_token);
-          }
+          setTimeout(async () => {
+            const profile = await syncUserProfile(session.user);
+            if (profile) {
+              setUser(profile);
+              setAuthToken(session.access_token);
+            }
+          }, 0);
         } else if (event === "SIGNED_OUT") {
           setUser(DEMO_USER);
           setAuthToken(null);

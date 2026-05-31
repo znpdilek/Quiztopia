@@ -6,44 +6,31 @@ import { CircleHelp, Sparkles } from "lucide-react";
 
 export default function LoginPage() {
   const { login } = useUser();
-  const [form, setForm] = useState({ username: "", password: "" });
+  const [form, setForm] = useState({ email: "", password: "" });
   const [showPw, setShowPw]   = useState(false);
   const [error, setError]     = useState("");
   const [loading, setLoading] = useState(false);
 
-  
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
-  if (!form.username || !form.password) {
-    setError("Kullanıcı adı ve şifre zorunludur.");
-    return;
-  }
-  setLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    if (!form.email || !form.password) {
+      setError("E-posta ve şifre zorunludur.");
+      return;
+    }
+    setLoading(true);
 
-  // username → email lookup (Supabase profiles tablosundan)
-  const { supabase } = await import("../lib/supabase.js");
-  const { data: profile, error: lookupError } = await supabase
-    .from("users")
-    .select("email")
-    .eq("username", form.username)
-    .single();
-
-  if (lookupError || !profile?.email) {
-    setError("Bu kullanıcı adına ait hesap bulunamadı.");
+    // Doğrudan e-posta ile giriş — username->email arama adımı yok,
+    // dolayısıyla RLS sorunu da yok.
+    const result = await login(form.email, form.password);
+    if (result?.error) setError(result.error);
     setLoading(false);
-    return;
-  }
-
-  const result = await login(profile.email, form.password);
-  if (result?.error) setError(result.error);
-  setLoading(false);
-};
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-md animate-slide-up">
-     
+
      {/* Logo */}
 <div className="flex justify-center mb-8">
 
@@ -133,14 +120,14 @@ const handleSubmit = async (e) => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-xs font-display font-semibold tracking-widest text-white/40 uppercase mb-2">
-                Kullanıcı Adı
+                E-posta
               </label>
               <input
-                type="text"
-                autoComplete="username"
-                value={form.username}
-                onChange={e => setForm(p => ({ ...p, username: e.target.value }))}
-                placeholder="QuizMaster42"
+                type="email"
+                autoComplete="email"
+                value={form.email}
+                onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
+                placeholder="ornek@eposta.com"
                 className="w-full px-4 py-3 rounded-xl bg-dark-700/80 border border-white/10
                           text-white placeholder-white/20 text-sm font-body
                           focus:outline-none focus:border-neon-cyan/50 focus:bg-dark-700
