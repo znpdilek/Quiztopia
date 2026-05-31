@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { UserPlus, Eye, EyeOff, AlertCircle, CheckCircle, Mail } from "lucide-react";
+import { UserPlus, Eye, EyeOff, AlertCircle, CheckCircle, Mail, CircleHelp, Sparkles } from "lucide-react";
 import { useUser } from "../context/UserContext.jsx";
-import quiztopiaLogo from "../assets/quiztopia-logo.png";
+
 
 export default function RegisterPage() {
   const { register } = useUser();
@@ -45,7 +45,23 @@ export default function RegisterPage() {
       <div className="min-h-screen flex items-center justify-center px-4">
         <div className="w-full max-w-md animate-slide-up">
           <div className="flex justify-center mb-8">
-            <img src={quiztopiaLogo} alt="Quiztopia" className="h-20 w-auto" />
+            <div className="flex items-center gap-3">
+                <div className="relative flex items-center justify-center w-14 h-14">
+                  <div className="absolute w-14 h-14 rounded-full border-2 border-neon-cyan opacity-60" />
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neon-cyan to-neon-pink flex items-center justify-center rotate-12">
+                    <CircleHelp size={22} className="text-dark-900 -rotate-12" />
+                  </div>
+                  <Sparkles size={13} className="absolute -top-1 -right-1 text-neon-cyan" />
+                </div>
+                <div className="leading-none">
+                  <div className="font-display font-extrabold text-3xl tracking-wider neon-text">
+                    QUIZITOPIA
+                  </div>
+                  <div className="text-[9px] opacity-70 tracking-[0.35em]">
+                    PLAY • LEARN • LEVEL UP
+                  </div>
+                </div>
+              </div>
           </div>
           <div className="card p-8 border border-white/10 text-center space-y-6">
             <div className="w-16 h-16 rounded-full bg-neon-cyan/10 border border-neon-cyan/30
@@ -81,7 +97,23 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md animate-slide-up">
         <div className="flex justify-center mb-8">
-          <img src={quiztopiaLogo} alt="Quiztopia" className="h-20 w-auto" />
+          <div className="flex items-center gap-3">
+            <div className="relative flex items-center justify-center w-14 h-14">
+              <div className="absolute w-14 h-14 rounded-full border-2 border-neon-cyan opacity-60" />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neon-cyan to-neon-pink flex items-center justify-center rotate-12">
+                <CircleHelp size={22} className="text-dark-900 -rotate-12" />
+              </div>
+              <Sparkles size={13} className="absolute -top-1 -right-1 text-neon-cyan" />
+            </div>
+            <div className="leading-none">
+              <div className="font-display font-extrabold text-3xl tracking-wider neon-text">
+                QUIZITOPIA
+              </div>
+              <div className="text-[9px] opacity-70 tracking-[0.35em]">
+                PLAY • LEARN • LEVEL UP
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="card p-8 border border-white/10 space-y-6">
