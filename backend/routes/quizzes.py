@@ -181,16 +181,20 @@ async def submit_answer(payload: QuizSubmitRequest, db=Depends(get_supabase)):
     new_level       = get_level(new_total_xp)
 
     # DB güncelle
+    # DB güncelle
     try:
         db.table("users").update({
-            "total_xp":     new_total_xp,
-            "level":        new_level,
-            "quiz_count":   quiz_count + 1,
+            "total_xp":      new_total_xp,
+            "level":         new_level,
+            "quiz_count":    quiz_count + 1,
             "correct_count": correct_count,
-            "streak":       streak,
-            "badges":       existing_badges + new_badges,
+            "streak":        streak,
+            "badges":        existing_badges + new_badges,
         }).eq("id", payload.user_id).execute()
+    except Exception as e:
+        print("!! users update HATASI:", repr(e))
 
+    try:
         db.table("test_history").insert({
             "user_id":     payload.user_id,
             "question_id": payload.question_id,
@@ -200,15 +204,17 @@ async def submit_answer(payload: QuizSubmitRequest, db=Depends(get_supabase)):
             "time_spent":  payload.time_spent,
             "xp_earned":   total_xp_earned,
         }).execute()
+    except Exception as e:
+        print("!! test_history insert HATASI:", repr(e))
 
-        if new_badges:
-            for b in new_badges:
-                db.table("user_achievements").insert({
-                    "user_id":  payload.user_id,
-                    "badge_id": b,
-                }).execute()
-    except Exception:
-        pass  # local-only mode
+    try:
+        for b in new_badges:
+            db.table("user_achievements").insert({
+                "user_id":  payload.user_id,
+                "badge_id": b,
+            }).execute()
+    except Exception as e:
+        print("!! achievement insert HATASI:", repr(e))
 
     return QuizSubmitResponse(
         correct=is_correct,
