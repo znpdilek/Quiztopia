@@ -35,7 +35,7 @@ batch_size = 100
 total = 0
 for i in range(0, len(rows), batch_size):
     batch = rows[i : i + batch_size]
-    sb.table("questions").upsert(batch, on_conflict="soru").execute()
+    sb.table("questions").insert(batch).execute()
     total += len(batch)
     print(f"  {total}/{len(rows)} soru aktarıldı...")
 
