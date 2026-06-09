@@ -15,7 +15,7 @@ SUPABASE_KEY: str = os.environ["SUPABASE_SERVICE_ROLE_KEY"]   # service-role →
 _client: Client | None = None
 
 
-def get_supabase() -> Client:
+def get_supabase() -> Client: #singleton 
     global _client
     if _client is None:
         _client = create_client(SUPABASE_URL, SUPABASE_KEY)

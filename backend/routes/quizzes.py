@@ -28,7 +28,7 @@ for i, q in enumerate(LOCAL_QUESTIONS):
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
-def _normalize_answer(ans: str) -> str:
+def _normalize_answer(ans: str) -> str: #kullanıcının cevabını temizliyor
     """'a)', 'A', 'a' → 'A'"""
     return ans.strip().upper().replace(")", "").replace(".", "")
 
@@ -107,7 +107,7 @@ async def submit_answer(payload: QuizSubmitRequest, db=Depends(get_supabase)):
     question = None
     try:
         res = db.table("questions").select("*").eq("id", payload.question_id).single().execute()
-        question = res.data
+        question = res.data #"offline-first
     except Exception:
         pass
     if not question:
@@ -129,7 +129,8 @@ async def submit_answer(payload: QuizSubmitRequest, db=Depends(get_supabase)):
     category_correct = 0
 
     try:
-        u = db.table("users").select("*").eq("id", payload.user_id).single().execute()
+        #Kullanıcının mevcut durumunu çek. 
+        u = db.table("users").select("*").eq("id", payload.user_id).single().execute() 
         if u.data:
             user_xp       = u.data.get("total_xp", 0)
             quiz_count    = u.data.get("quiz_count", 0)
@@ -174,7 +175,7 @@ async def submit_answer(payload: QuizSubmitRequest, db=Depends(get_supabase)):
             category_correct + 1,
         )
     else:
-        streak = 0
+        streak = 0 #seri sıfırlanıyor
 
     total_xp_earned = xp_earned + badge_xp
     new_total_xp    = user_xp + total_xp_earned

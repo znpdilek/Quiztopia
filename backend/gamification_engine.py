@@ -92,16 +92,16 @@ CATEGORY_BADGE_MAP = {
 
 
 def calculate_xp(difficulty: str, time_spent: int, streak: int) -> int:
-    base = XP_CORRECT.get(difficulty, 10)
+    base = XP_CORRECT.get(difficulty, 10) # Kolay 10, Orta 20, Zor 35
     bonus = 0
     if time_spent < 10:
-        bonus += XP_SPEED_BONUS
-    if streak > 0 and streak % 5 == 0:
-        bonus += XP_STREAK_BONUS
+        bonus += XP_SPEED_BONUS # hızlıysan +5
+    if streak > 0 and streak % 5 == 0:  #seri sayısı 5'in tam katıysa
+        bonus += XP_STREAK_BONUS  #her 5'li seride +15
     return base + bonus
 
 
-def get_level(total_xp: int) -> str:
+def get_level(total_xp: int) -> str:  #toplam XP hangi seviyeye denk geliyor?
     level = LEVELS[0][1]
     for threshold, name in LEVELS:
         if total_xp >= threshold:
@@ -119,7 +119,7 @@ def get_level_progress(total_xp: int) -> float:
     return 1.0
 
 
-def check_badges(
+def check_badges( #hangi yeni rozetleri hak etti?
     existing_badges: List[str],
     total_xp: int,
     quiz_count: int,
@@ -135,7 +135,7 @@ def check_badges(
     new_badges = []
     bonus_xp   = 0
 
-    def award(badge_id: str):
+    def award(badge_id: str): #Bu rozet kullanıcıda zaten yoksa ver.
         nonlocal bonus_xp
         if badge_id not in existing_badges and badge_id not in new_badges:
             new_badges.append(badge_id)

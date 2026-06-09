@@ -193,7 +193,7 @@ export default function ZenMode({
         </div>
 
         {/* Result + Next */}
-        {answered && (
+        {answered && result && (   // ← YENİ
           <div className="w-full animate-pop">
             <div className={`flex items-center justify-between p-5 rounded-2xl border
               ${result?.correct

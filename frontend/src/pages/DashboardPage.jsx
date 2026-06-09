@@ -71,7 +71,10 @@ function TopicBar({ data }) {
             fontFamily: "DM Sans",
             fontSize:   "12px",
             color:      "#fff",
+            
           }}
+           labelStyle={{ color: "#fff", fontWeight: 700 }}     // ← EKLE
+          itemStyle={{ color: "#ff2d9b", fontWeight: 600 }}   // ← EKLE
           formatter={(value, name) => [value, name === "doğru" ? "✓ Doğru" : "✗ Yanlış"]}
         />
         <Bar dataKey="doğru"  radius={[4, 4, 0, 0]}>

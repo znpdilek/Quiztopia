@@ -1,6 +1,6 @@
 """
 Kullanıcı endpoint'leri
-POST /api/users/            → kullanıcı oluştur / upsert
+POST /api/users/            →  oluştur / upsertkullanıcı
 GET  /api/users/{id}        → profil
 GET  /api/users/{id}/stats  → istatistik + konu bazlı analiz
 """

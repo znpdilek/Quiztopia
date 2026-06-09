@@ -3,17 +3,16 @@ import { Zap, Shield, Filter, Shuffle } from "lucide-react";
 import { api } from "../utils/api.js";
 
 const CATEGORY_META = {
-  "C++":          { icon: "⚡", color: "text-cyan-400" },
-  SQL:            { icon: "🗄️", color: "text-blue-400" },
-  JAVA:           { icon: "☕", color: "text-amber-400" },
-  BILGI:          { icon: "🛡️", color: "text-green-400" },
-  PYSORU:         { icon: "🐍", color: "text-yellow-400" },
-  "PYSORUORTAA.HTML": { icon: "🐍", color: "text-yellow-400" },
-  PHP:            { icon: "🐘", color: "text-purple-400" },
-  CSHARP:         { icon: "💠", color: "text-blue-300" },
-  HT:             { icon: "🌐", color: "text-orange-400" },
-  RUBY:           { icon: "💎", color: "text-red-400" },
-  C:              { icon: "🔧", color: "text-gray-400" },
+  "C++":   { label: "C++",      icon: "⚡",  color: "text-cyan-400" },
+  SQL:     { label: "SQL",      icon: "🗄️", color: "text-blue-400" },
+  JAVA:    { label: "Java",     icon: "☕",  color: "text-amber-400" },
+  BILGI:   { label: "Güvenlik", icon: "🛡️", color: "text-green-400" },
+  PYSORU:  { label: "Python",   icon: "🐍",  color: "text-yellow-400" },
+  PHP:     { label: "PHP",      icon: "🐘",  color: "text-purple-400" },
+  CSHARP:  { label: "C#",       icon: "💠",  color: "text-blue-300" },
+  HT:      { label: "HTML",     icon: "🌐",  color: "text-orange-400" },
+  RUBY:    { label: "Ruby",     icon: "💎",  color: "text-red-400" },
+  C:       { label: "C",        icon: "🔧",  color: "text-gray-400" },
 };
 
 const DIFFICULTIES = [
@@ -111,7 +110,7 @@ export default function QuizConfig({ onStart }) {
               >
                 <div className="text-2xl mb-1">{meta.icon}</div>
                 <div className={`text-xs font-display font-semibold ${active ? "text-neon-cyan" : meta.color}`}>
-                  {cat}
+                  {meta.label || cat}
                 </div>
               </button>
             );

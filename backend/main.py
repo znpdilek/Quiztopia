@@ -10,7 +10,7 @@ import uvicorn
 
 from routes import quizzes, users, gamification, notes
 
-app = FastAPI(
+app = FastAPI( #web sunucusunu yaratıyor
     title="Quiztopia API",
     version="1.0.0",
     description="Quiztopia - Modern Eğitim Platformu API"
@@ -19,7 +19,7 @@ app = FastAPI(
 # ── CORS ────────────────────────────────────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
+    allow_origins=[ 
         "http://localhost:3000",
         "http://localhost:5173",
         "https://quiztopia.app",          # production domain
