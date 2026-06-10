@@ -21,6 +21,7 @@ export function useQuiz() {
   const [score,          setScore]          = useState(0);
   const [loading,        setLoading]        = useState(false);
   const [phase,          setPhase]          = useState("config"); // config | quiz | result
+  const [history,        setHistory]        = useState([]); // cevap geçmişi
 
   // Timer state (controlled externally via timerRef tick)
   const [timeLeft, setTimeLeft] = useState(TIMER_SECONDS);
@@ -61,6 +62,7 @@ export function useQuiz() {
     setSelectedAnswer(null);
     setAnswered(false);
     setResult(null);
+    setHistory([]);
     setPhase("quiz");
     startTimer();
     setLoading(false);
@@ -85,6 +87,14 @@ export function useQuiz() {
     });
 
     setResult(res);
+
+    // Cevap geçmişine ekle
+    setHistory(prev => [...prev, {
+      question:      q,
+      userAnswer:    letter,
+      correctAnswer: q.dogru_cevap?.toUpperCase(),
+      correct:       res.correct,
+    }]);
 
     if (res.correct) {
       setScore(p => p + 1);
@@ -115,6 +125,25 @@ export function useQuiz() {
     startTimer();
   }, [currentIdx, questions.length, startTimer]);
 
+  // ── Retry wrong questions ──────────────────────────────────────────────────
+  const retryWrong = useCallback((wrongQuestions) => {
+    if (!wrongQuestions.length) return;
+    stopTimer();
+    // Shuffle
+    const shuffled = [...wrongQuestions].sort(() => Math.random() - 0.5);
+    setQuestions(shuffled);
+    setCurrentIdx(0);
+    setScore(0);
+    setSessionXP(0);
+    setStreak(0);
+    setSelectedAnswer(null);
+    setAnswered(false);
+    setResult(null);
+    setHistory([]);
+    setPhase("quiz");
+    startTimer();
+  }, [stopTimer, startTimer]);
+
   // ── Reset ──────────────────────────────────────────────────────────────────
   const resetQuiz = useCallback(() => {
     stopTimer();
@@ -127,6 +156,7 @@ export function useQuiz() {
     setStreak(0);
     setSessionXP(0);
     setScore(0);
+    setHistory([]);
   }, [stopTimer]);
 
   return {
@@ -135,9 +165,9 @@ export function useQuiz() {
     currentQuestion: questions[currentIdx] ?? null,
     selectedAnswer, answered, result,
     streak, sessionXP, score, loading,
-    timeLeft,
+    timeLeft, history,
     totalQuestions: questions.length,
     // Actions
-    startQuiz, submitAnswer, nextQuestion, resetQuiz,
+    startQuiz, retryWrong, submitAnswer, nextQuestion, resetQuiz,
   };
 }

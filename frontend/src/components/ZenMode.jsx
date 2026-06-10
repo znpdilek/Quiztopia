@@ -81,7 +81,7 @@ export default function ZenMode({
 
   const CATEGORY_ICONS = {
     "C++": "⚡", SQL: "🗄️", JAVA: "☕", BILGI: "🛡️",
-    PYSORU: "🐍", PHP: "🐘", CSHARP: "💠", HT: "🌐",
+    PYTHON: "🐍", PHP: "🐘", CSHARP: "💠", HTML: "🌐",
     RUBY: "💎", C: "🔧",
   };
 

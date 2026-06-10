@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import uvicorn
 
-from routes import quizzes, users, gamification, notes
+from routes import quizzes, users, gamification, notes, admin
 
 app = FastAPI( #web sunucusunu yaratıyor
     title="Quiztopia API",
@@ -35,6 +35,7 @@ app.include_router(quizzes.router,       prefix="/api/quizzes",        tags=["Qu
 app.include_router(users.router,         prefix="/api/users",           tags=["Users"])
 app.include_router(gamification.router,  prefix="/api/gamification",    tags=["Gamification"])
 app.include_router(notes.router,         prefix="/api/notes",           tags=["Notes"])
+app.include_router(admin.router,         prefix="/api/admin",            tags=["Admin"])
 
 
 @app.get("/")

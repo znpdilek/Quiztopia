@@ -7,10 +7,10 @@ const CATEGORY_META = {
   SQL:     { label: "SQL",      icon: "🗄️", color: "text-blue-400" },
   JAVA:    { label: "Java",     icon: "☕",  color: "text-amber-400" },
   BILGI:   { label: "Güvenlik", icon: "🛡️", color: "text-green-400" },
-  PYSORU:  { label: "Python",   icon: "🐍",  color: "text-yellow-400" },
+  PYTHON:  { label: "Python",   icon: "🐍",  color: "text-yellow-400" },
   PHP:     { label: "PHP",      icon: "🐘",  color: "text-purple-400" },
   CSHARP:  { label: "C#",       icon: "💠",  color: "text-blue-300" },
-  HT:      { label: "HTML",     icon: "🌐",  color: "text-orange-400" },
+  HTML:    { label: "HTML",     icon: "🌐",  color: "text-orange-400" },
   RUBY:    { label: "Ruby",     icon: "💎",  color: "text-red-400" },
   C:       { label: "C",        icon: "🔧",  color: "text-gray-400" },
 };
@@ -24,9 +24,9 @@ const DIFFICULTIES = [
 
 const ALL_COUNTS = [5, 10, 20, 30];
 
-export default function QuizConfig({ onStart }) {
+export default function QuizConfig({ onStart, presetKategori = "" }) {
   const [categories,    setCategories]    = useState([]);
-  const [selected,      setSelected]      = useState({ kategori: "", zorluk: "", count: 10 });
+  const [selected,      setSelected]      = useState({ kategori: presetKategori, zorluk: "", count: 10 });
   const [availableCount, setAvailableCount] = useState(null); // null = henüz hesaplanmadı
 
   // Kategorileri yükle

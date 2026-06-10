@@ -1,8 +1,10 @@
-import { Link, useLocation } from "react-router-dom";
-import { Brain, BarChart2, BookOpen, Trophy, Zap, LogOut } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Brain, BarChart2, BookOpen, Trophy, Zap, LogOut, LogIn, ShieldCheck } from "lucide-react";
 import { useUser } from "../context/UserContext.jsx";
 import { api } from "../utils/api.js";
 import { Sparkles, CircleHelp } from "lucide-react";
+
+const ADMIN_EMAILS = ["zeynep.dilek.04@gmail.com"];
 
 
 const NAV_LINKS = [
@@ -23,8 +25,10 @@ const LEVEL_COLORS = {
 };
 
 export default function Navbar() {
-  const { user, logout } = useUser();
+  const { user, logout, isAuthenticated } = useUser();
+  const isAdmin = isAuthenticated && ADMIN_EMAILS.includes(user?.email);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const progress = api.getLevelProgress(user.total_xp);
   const levelColor = LEVEL_COLORS[user.level] || "border-gray-500 text-gray-400";
@@ -115,41 +119,67 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* User XP */}
+        {/* User area */}
         <div className="flex items-center gap-3">
-          {/* XP mini bar */}
-          <div className="hidden sm:flex flex-col items-end gap-1">
-            <div className="flex items-center gap-2 text-xs font-mono">
-              <span className={`level-badge ${levelColor}`}>
-                {user.level}
-              </span>
-              <span className="text-white/40">{user.total_xp} XP</span>
-            </div>
-            <div className="w-32 xp-bar-track">
-              <div
-                className="xp-bar-fill transition-all duration-700"
-                style={{ width: `${Math.round(progress * 100)}%` }}
-              />
-            </div>
-          </div>
-
-          {/* Avatar */}
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-neon-cyan/30 to-neon-pink/30
-                          border border-neon-cyan/30 flex items-center justify-center
-                          font-display font-bold text-sm text-neon-cyan">
-            {user.username.charAt(0).toUpperCase()}
-          </div>
-
-          {/* Logout */}
-          {logout && (
-            <button
-              onClick={logout}
-              title="Çıkış Yap"
-              className="w-9 h-9 rounded-xl border border-white/10 bg-dark-700/50 flex items-center justify-center
-                         text-white/40 hover:text-red-400 hover:border-red-400/30 transition-all duration-200"
-            >
-              <LogOut size={15} />
-            </button>
+          {isAuthenticated ? (
+            <>
+              {/* XP mini bar */}
+              <div className="hidden sm:flex flex-col items-end gap-1">
+                <div className="flex items-center gap-2 text-xs font-mono">
+                  <span className={`level-badge ${levelColor}`}>{user.level}</span>
+                  <span className="text-white/40">{user.total_xp} XP</span>
+                </div>
+                <div className="w-32 xp-bar-track">
+                  <div
+                    className="xp-bar-fill transition-all duration-700"
+                    style={{ width: `${Math.round(progress * 100)}%` }}
+                  />
+                </div>
+              </div>
+              {/* Avatar */}
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-neon-cyan/30 to-neon-pink/30
+                              border border-neon-cyan/30 flex items-center justify-center
+                              font-display font-bold text-sm text-neon-cyan">
+                {user.username.charAt(0).toUpperCase()}
+              </div>
+              {/* Admin link */}
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  title="Admin Paneli"
+                  className="w-9 h-9 rounded-xl border border-neon-pink/20 bg-neon-pink/5 flex items-center justify-center
+                             text-neon-pink/60 hover:text-neon-pink hover:border-neon-pink/40 transition-all duration-200"
+                >
+                  <ShieldCheck size={15} />
+                </Link>
+              )}
+              {/* Logout */}
+              <button
+                onClick={logout}
+                title="Çıkış Yap"
+                className="w-9 h-9 rounded-xl border border-white/10 bg-dark-700/50 flex items-center justify-center
+                           text-white/40 hover:text-red-400 hover:border-red-400/30 transition-all duration-200"
+              >
+                <LogOut size={15} />
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => navigate("/login")}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/20
+                           text-white/60 hover:text-white hover:border-white/40 text-xs font-display font-semibold transition-all"
+              >
+                <LogIn size={13} /> Giriş Yap
+              </button>
+              <button
+                onClick={() => navigate("/register")}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neon-cyan/10 border border-neon-cyan/30
+                           text-neon-cyan hover:bg-neon-cyan/20 text-xs font-display font-semibold transition-all"
+              >
+                Kayıt Ol
+              </button>
+            </>
           )}
         </div>
       </div>

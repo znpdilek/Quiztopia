@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis,
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -10,10 +11,22 @@ import { XPDisplay, BadgeGrid } from "../components/XPBadge.jsx";
 import { api } from "../utils/api.js";
 
 const CATEGORY_LABELS = {
-  "C++":   "C++",  SQL: "SQL",  JAVA: "Java",
-  BILGI:   "Güvenlik", PYSORU: "Python",
-  PHP:     "PHP",  CSHARP: "C#", HT: "HTML",
-  RUBY:    "Ruby", C: "C",
+  "C++":        "C++",
+  CPP:          "C++",
+  SQL:          "SQL",
+  JAVA:         "Java",
+  BILGI:        "Güvenlik",
+  PYTHON:       "Python",
+  PHP:          "PHP",
+  CSHARP:       "C#",
+  HTML:         "HTML",
+  CSS:          "CSS",
+  JAVASCRIPT:   "JavaScript",
+  JS:           "JavaScript",
+  RUBY:         "Ruby",
+  C:            "C",
+  ALGORITHMS:   "Algoritmalar",
+  GIT:          "Git",
 };
 
 const NEON_COLORS = [
@@ -120,6 +133,7 @@ function TopicRadar({ data }) {
 
 export default function DashboardPage() {
   const { user } = useUser();
+  const navigate = useNavigate();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -231,9 +245,9 @@ export default function DashboardPage() {
             {Object.entries(breakdown)
               .sort((a, b) => b[1].pct - a[1].pct)
               .map(([cat, vals], i) => (
-                <div key={cat} className="px-6 py-4 flex items-center gap-4">
-                  <span className="text-white/30 font-mono text-xs w-5">{i + 1}</span>
-                  <span className="font-body font-medium text-white/70 w-28 text-sm">
+                <div key={cat} className="px-4 sm:px-6 py-4 flex items-center gap-3 sm:gap-4">
+                  <span className="text-white/30 font-mono text-xs w-5 shrink-0">{i + 1}</span>
+                  <span className="font-body font-medium text-white/70 w-20 sm:w-28 text-xs sm:text-sm shrink-0 truncate">
                     {CATEGORY_LABELS[cat] || cat}
                   </span>
                   <div className="flex-1 xp-bar-track">
@@ -270,12 +284,22 @@ export default function DashboardPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {weakTopics.map(([cat, vals]) => (
-              <div key={cat} className="p-4 rounded-xl bg-neon-pink/5 border border-neon-pink/10">
-                <p className="font-display font-bold text-white/80 text-sm">
-                  {CATEGORY_LABELS[cat] || cat}
-                </p>
-                <p className="text-red-400 font-mono text-2xl font-black mt-1">{vals.pct}%</p>
-                <p className="text-white/30 font-mono text-xs">{vals.correct}/{vals.total} doğru</p>
+              <div key={cat} className="p-4 rounded-xl bg-neon-pink/5 border border-neon-pink/10 flex flex-col gap-3">
+                <div>
+                  <p className="font-display font-bold text-white/80 text-sm">
+                    {CATEGORY_LABELS[cat] || cat}
+                  </p>
+                  <p className="text-red-400 font-mono text-2xl font-black mt-1">{vals.pct}%</p>
+                  <p className="text-white/30 font-mono text-xs">{vals.correct}/{vals.total} doğru</p>
+                </div>
+                <button
+                  onClick={() => navigate("/quiz", { state: { kategori: cat } })}
+                  className="w-full py-2 rounded-lg bg-neon-pink/10 border border-neon-pink/20
+                             text-neon-pink text-xs font-display font-semibold tracking-wider
+                             hover:bg-neon-pink/20 transition-all duration-200 flex items-center justify-center gap-1.5"
+                >
+                  Bu konuyu çalış →
+                </button>
               </div>
             ))}
           </div>

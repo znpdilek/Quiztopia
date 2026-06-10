@@ -62,7 +62,7 @@ let localUserState = {
   category_correct: {},
 };
 
-function checkBadgesLocal(state, category) {
+function checkBadgesLocal(state, category, time_spent = 99) {
   const earned = [];
   const { total_xp, quiz_count, correct_count, streak, badges } = state;
 
@@ -75,6 +75,7 @@ function checkBadgesLocal(state, category) {
   if (streak >= 5)             award("hatasiz_5",   "Hatasız Seri 🔥");
   if (streak >= 10)            award("hatasiz_10",  "Demir Zihin 🧠");
   if (total_xp >= 3000)        award("efsane",      "Efsane 👑");
+  if (time_spent < 10)         award("hiz_yildizi", "Hız Yıldızı ⚡");
 
   const catCorrect = state.category_correct[category] || 0;
   if (catCorrect >= 20) {
@@ -137,7 +138,7 @@ export const api = {
     const xpEarned    = xpBase + speedBonus + streakBonus;
     localUserState.total_xp += xpEarned;
 
-    const badges = checkBadgesLocal(localUserState, question.kategori);
+    const badges = checkBadgesLocal(localUserState, question.kategori, time_spent);
 
     return {
       correct:        isCorrect,
@@ -165,21 +166,32 @@ export const api = {
   },
 
   // ── Leaderboard ──
-  // getLeaderboard fonksiyonunu bul ve tamamını bununla değiştir:
-  async getLeaderboard(_period = "weekly") {
+  async getLeaderboard(period = "alltime") {
     const { data, error } = await supabase
-      .from("users")
-      .select("username, total_xp, level, badges")
-      .order("total_xp", { ascending: false })
-      .limit(20);
+      .rpc("get_leaderboard", { period });
 
-    if (error || !data?.length) return [];
+    if (error || !data?.length) {
+      // RPC yoksa eski yönteme düş (sadece alltime)
+      const { data: fallback } = await supabase
+        .from("users")
+        .select("username, total_xp, level, badges")
+        .order("total_xp", { ascending: false })
+        .limit(20);
+      if (!fallback?.length) return [];
+      return fallback.map((row, i) => ({
+        rank:     i + 1,
+        username: row.username || "Anonim",
+        xp:       row.total_xp || 0,
+        level:    row.level    || getLevel(row.total_xp || 0),
+        badges:   row.badges   || [],
+      }));
+    }
 
     return data.map((row, i) => ({
       rank:     i + 1,
       username: row.username || "Anonim",
-      xp:       row.total_xp || 0,
-      level:    row.level    || getLevel(row.total_xp || 0),
+      xp:       Number(row.xp) || 0,
+      level:    row.level    || getLevel(Number(row.xp) || 0),
       badges:   row.badges   || [],
     }));
   },

@@ -3,6 +3,19 @@ import { Trophy, Crown, Zap } from "lucide-react";
 import { api } from "../utils/api.js";
 import { useUser } from "../context/UserContext.jsx";
 
+const BADGE_DEFS = {
+  "ilk_cevap":   { icon: "🎯", label: "İlk Adım" },
+  "ilk_100":     { icon: "💯", label: "İlk 100" },
+  "hatasiz_5":   { icon: "🔥", label: "Hatasız Seri" },
+  "hatasiz_10":  { icon: "🧠", label: "Demir Zihin" },
+  "hiz_yildizi": { icon: "⚡", label: "Hız Yıldızı" },
+  "sql_uzman":   { icon: "🗄️", label: "SQL Uzmanı" },
+  "bilgi_uzman": { icon: "🛡️", label: "Güvenlik Uzmanı" },
+  "cpp_uzman":   { icon: "🖥️", label: "C++ Gurusu" },
+  "java_uzman":  { icon: "☕", label: "Java Ustası" },
+  "efsane":      { icon: "👑", label: "Efsane" },
+};
+
 const PERIOD_OPTIONS = [
   { value: "weekly",  label: "Haftalık" },
   { value: "monthly", label: "Aylık" },
@@ -86,15 +99,21 @@ export default function LeaderboardPage() {
                       transition-all hover:scale-105`}
                   >
                     <div className="text-2xl mb-1">{style.icon}</div>
-                    <div className={`w-12 h-12 rounded-xl bg-dark-700 flex items-center justify-center
-                                    font-display font-bold text-lg mb-2 border ${style.border} ${style.text}`}>
+                    <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-dark-700 flex items-center justify-center
+                                    font-display font-bold text-base sm:text-lg mb-2 border ${style.border} ${style.text}`}>
                       {entry.username.charAt(0)}
                     </div>
-                    <p className={`font-display font-bold text-sm ${style.text}`}>{entry.username}</p>
-                    <p className="font-mono text-xs text-white/40 mt-0.5">{entry.xp.toLocaleString()} XP</p>
-                    {entry.badges?.slice(0, 2).map((b, bi) => (
-                      <span key={bi} className="text-sm">{b}</span>
-                    ))}
+                    <p className={`font-display font-bold text-xs sm:text-sm ${style.text} truncate w-full text-center px-1`}>{entry.username}</p>
+                    <p className="font-mono text-[10px] sm:text-xs text-white/40 mt-0.5">{entry.xp.toLocaleString()} XP</p>
+                    <div className="flex flex-wrap gap-1 justify-center mt-1">
+                      {entry.badges?.slice(0, 2).map((b, bi) => {
+                        const def = BADGE_DEFS[b] || { icon: "⭐", label: b };
+                        return (
+                          <span key={bi} title={def.label}
+                            className="text-base cursor-default" >{def.icon}</span>
+                        );
+                      })}
+                    </div>
                   </div>
                 );
               })}
@@ -146,10 +165,14 @@ export default function LeaderboardPage() {
                     </div>
 
                     {/* Badges */}
-                    <div className="hidden sm:flex gap-1">
-                      {(entry.badges || []).slice(0, 3).map((b, i) => (
-                        <span key={i} className="text-sm">{b}</span>
-                      ))}
+                    <div className="hidden sm:flex gap-1 items-center">
+                      {(entry.badges || []).slice(0, 3).map((b, i) => {
+                        const def = BADGE_DEFS[b] || { icon: "⭐", label: b };
+                        return (
+                          <span key={i} title={def.label}
+                            className="text-base cursor-default">{def.icon}</span>
+                        );
+                      })}
                     </div>
 
                     {/* XP */}

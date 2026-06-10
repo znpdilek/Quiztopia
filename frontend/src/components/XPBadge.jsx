@@ -43,16 +43,16 @@ export function XPDisplay({ xp, level, showBar = true, size = "md" }) {
 }
 
 const BADGE_DEFS = {
-  "İlk Adım":                { icon: "🎯", color: "border-blue-500/40 bg-blue-500/10" },
-  "İlk 100":                 { icon: "💯", color: "border-yellow-500/40 bg-yellow-500/10" },
-  "Hatasız Seri":            { icon: "🔥", color: "border-orange-500/40 bg-orange-500/10" },
-  "Demir Zihin":             { icon: "🧠", color: "border-purple-500/40 bg-purple-500/10" },
-  "SQL Uzmanı":              { icon: "🗄️", color: "border-cyan-500/40 bg-cyan-500/10" },
-  "Bilgi Güvenliği Uzmanı":  { icon: "🛡️", color: "border-green-500/40 bg-green-500/10" },
-  "C++ Gurusu":              { icon: "⚡", color: "border-neon-cyan/40 bg-neon-cyan/10" },
-  "Java Ustası":             { icon: "☕", color: "border-amber-500/40 bg-amber-500/10" },
-  "Hız Yıldızı":             { icon: "⚡", color: "border-yellow-400/40 bg-yellow-400/10" },
-  "Efsane":                  { icon: "👑", color: "border-neon-cyan/60 bg-neon-cyan/10" },
+  "ilk_cevap":   { icon: "🎯", label: "İlk Adım",                 desc: "İlk soruyu cevapladın!",                            color: "border-blue-500/40   bg-blue-500/10   text-blue-300" },
+  "ilk_100":     { icon: "💯", label: "İlk 100",                  desc: "100 XP'ye ulaştın!",                                color: "border-yellow-400/40 bg-yellow-400/10 text-yellow-300" },
+  "hatasiz_5":   { icon: "🔥", label: "Hatasız Seri",             desc: "5 soruyu arka arkaya doğru yanıtladın!",             color: "border-orange-500/40 bg-orange-500/10 text-orange-300" },
+  "hatasiz_10":  { icon: "🧠", label: "Demir Zihin",              desc: "10 soruyu arka arkaya doğru yanıtladın!",            color: "border-purple-500/40 bg-purple-500/10 text-purple-300" },
+  "hiz_yildizi": { icon: "⚡", label: "Hız Yıldızı",              desc: "10 saniyenin altında doğru cevap verdin!",           color: "border-yellow-300/40 bg-yellow-300/10 text-yellow-200" },
+  "sql_uzman":   { icon: "🗄️", label: "SQL Uzmanı",               desc: "SQL'de 20 soruyu doğru yanıtladın!",                color: "border-cyan-500/40   bg-cyan-500/10   text-cyan-300" },
+  "bilgi_uzman": { icon: "🛡️", label: "Güvenlik Uzmanı",          desc: "Bilgi Güvenliği'nde 20 soruyu doğru yanıtladın!",   color: "border-green-500/40  bg-green-500/10  text-green-300" },
+  "cpp_uzman":   { icon: "🖥️", label: "C++ Gurusu",               desc: "C++'da 20 soruyu doğru yanıtladın!",                color: "border-neon-cyan/40  bg-neon-cyan/10  text-neon-cyan" },
+  "java_uzman":  { icon: "☕", label: "Java Ustası",               desc: "Java'da 20 soruyu doğru yanıtladın!",               color: "border-amber-500/40  bg-amber-500/10  text-amber-300" },
+  "efsane":      { icon: "👑", label: "Efsane",                   desc: "3000 XP'ye ulaştın!",                               color: "border-neon-pink/50  bg-neon-pink/10  text-neon-pink" },
 };
 
 export function BadgeGrid({ badges, size = "md" }) {
@@ -65,16 +65,21 @@ export function BadgeGrid({ badges, size = "md" }) {
   return (
     <div className="flex flex-wrap gap-2">
       {badges.map((badge, i) => {
-        const def = BADGE_DEFS[badge] || { icon: "⭐", color: "border-white/20 bg-white/5" };
+        const def = BADGE_DEFS[badge] || {
+          icon: "⭐", label: badge, desc: "",
+          color: "border-white/20 bg-white/5 text-white/60"
+        };
         return (
           <div
             key={i}
-            className={`inline-flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-body
-              font-medium transition-all duration-200 hover:scale-105 ${def.color}`}
-            title={badge}
+            className={`inline-flex items-center gap-2 px-3 py-2 rounded-xl border font-body
+              font-medium transition-all duration-200 hover:scale-105 cursor-default ${def.color}`}
+            title={def.desc || def.label}
           >
-            <span className="text-base">{def.icon}</span>
-            {size !== "sm" && <span className="text-white/80">{badge}</span>}
+            <span className={size === "sm" ? "text-sm" : "text-base"}>{def.icon}</span>
+            {size !== "sm" && (
+              <span className="text-sm">{def.label}</span>
+            )}
           </div>
         );
       })}
